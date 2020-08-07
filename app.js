@@ -7,9 +7,10 @@ const app = express();
 
 app.use(bodyParser.json());
 
+//change id and password
 mongoose
   .connect(
-    'mongodb+srv://albert:balti1222@cluster0.coysl.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority',
+    'mongodb+srv://<USER>:<PASSWORD>@cluster0.coysl.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority',
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log('Connexion à MongoDB réussie !'))
