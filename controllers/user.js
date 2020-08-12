@@ -15,4 +15,22 @@ exports.signup = (req, res, next) => {
     .catch((err) => res.status(500).json({ err }));
 };
 
-exports.login = (req, res, next) => {};
+exports.login = (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      !user && res.status(401).json({ error: 'User not found' });
+      bcrypt
+        .compare(req.body.password, user.password)
+        .then((valid) => {
+          if (!valid) {
+            return res.status(401).json({ error: 'Invalid password' });
+          } else
+            res.status(200).json({
+              userId: user._id,
+              token: 'TOKEN',
+            });
+        })
+        .catch((err) => res.status(500).json({ err }));
+    })
+    .catch((err) => res.status(500).json({ err }));
+};
