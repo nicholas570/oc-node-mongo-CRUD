@@ -1,12 +1,11 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const app = express();
+const mongoose = require('mongoose');
+const path = require('path');
 
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 
-//change id and password
 mongoose
   .connect(
     'mongodb+srv://albert:balti1222@cluster0.coysl.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority',
@@ -15,7 +14,7 @@ mongoose
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-app.use(bodyParser.json());
+const app = express();
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,7 +29,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/stuff', stuffRoutes);
-app.use('api/auth', userRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
